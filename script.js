@@ -1,61 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
     const preloader = document.getElementById('preloader');
-    const splashScreen = document.getElementById('splash-screen');
     const counterElement = document.getElementById('money-counter');
     
     let currentCount = 0;
-    const targetCount = 748290; // The final "amount" counted
-    const duration = 2500; // 2.5 seconds of counting speed
-    const startTime = performance.now();
+    const targetCount = 684920; // The machine calculation ceiling point
+    const executionDuration = 2200; // Complete operations execution window (2.2s)
+    const engineStart = performance.now();
 
-    // 1. Money Counter Machine Functionality
-    function updateCounter(currentTime) {
-        const elapsedTime = currentTime - startTime;
-        if (elapsedTime < duration) {
-            // Progressive mathematical scaling to mimic machine physics slowing down at the end
-            const progress = elapsedTime / duration;
-            const easeOutQuad = progress * (2 - progress); 
-            currentCount = Math.floor(easeOutQuad * targetCount);
+    function processMoneyTicker(timestamp) {
+        const runtime = timestamp - engineStart;
+        
+        if (runtime < executionDuration) {
+            const linearProgress = runtime / executionDuration;
+            // Mechanical ease-out deceleration curve modeling
+            const mechanicalBrake = linearProgress * (2 - linearProgress); 
             
-            // Format number with commas to look like real legal tender currency tracking
+            currentCount = Math.floor(mechanicalBrake * targetCount);
             counterElement.textContent = currentCount.toLocaleString();
             
-            requestAnimationFrame(updateCounter);
+            requestAnimationFrame(processMoneyTicker);
         } else {
             counterElement.textContent = targetCount.toLocaleString();
-            endPreloader();
+            executeHandoff();
         }
     }
 
-    // Start counter clock
-    requestAnimationFrame(updateCounter);
+    // Initialize mechanical rendering loop
+    requestAnimationFrame(processMoneyTicker);
 
-    // 2. Shift from Preloader to Site Splash Action Layer
-    function endPreloader() {
+    function executeHandoff() {
         setTimeout(() => {
-            // Fade out preloader
-            preloader.style.opacity = '0';
-            preloader.style.visibility = 'hidden';
-            
-            // Initialize splash page interface
-            splashScreen.style.display = 'flex';
-            setTimeout(() => {
-                splashScreen.style.opacity = '1';
-            }, 50);
-        }, 400); // Small cinematic pause right after calculation ends
+            // Appends your structural state trigger natively
+            preloader.classList.add('done');
+        }, 300); // Sharp rhythmic beat pause before view reveal
     }
-});
-
-// 3. Main Splash Verification Action Layer (From previous step)
-document.getElementById('enter-btn').addEventListener('click', function() {
-    const splash = document.getElementById('splash-screen');
-    const video = document.getElementById('bg-video');
-
-    splash.style.opacity = '0';
-    splash.style.visibility = 'hidden';
-
-    video.muted = false;
-    video.play().catch(error => {
-        console.log("Audio unlock context failed or rejected: ", error);
-    });
 });
