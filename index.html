@@ -786,27 +786,26 @@
 <body class="no-scroll">
 
 <div id="preloader">
-    <div class="pre-machine-slot">
-        <div class="pre-bill b1"></div>
-        <div class="pre-bill b2"></div>
-        <div class="pre-bill b3"></div>
-    </div>
-    
     <div class="pre-eyebrow">Chaos to clarity, with total sincerity</div>
     
-    <div class="pre-counter-wrap">
-        <span class="pre-symbol">$</span><span id="money-counter">000,000</span>
-    </div>
-    
-    <div class="pre-name">
-        <span class="pre-word">VINAY</span>
-        <span class="pre-word">JAIN</span>
+    <div class="squid-cash-sphere">
+        <div class="falling-cash-rain">
+            <div class="squid-bill b-fall-1"></div>
+            <div class="squid-bill b-fall-2"></div>
+            <div class="squid-bill b-fall-3"></div>
+            <div class="squid-bill b-fall-4"></div>
+            <div class="squid-bill b-fall-5"></div>
+            <div class="squid-bill b-fall-6"></div>
+        </div>
+        
+        <div class="rising-cash-pile"></div>
     </div>
     
     <div class="pre-progress">
-        <div class="pre-bar" id="preLoaderBar"></div>
+        <div class="pre-bar"></div>
     </div>
-</div>   
+</div>
+    
 
 <!-- CURSOR -->
 <div class="dot" id="dot"></div>
@@ -1473,74 +1472,21 @@ function injectImages() {
 injectImages();
 
 <script>
-   document.addEventListener("DOMContentLoaded", () => {
-    const preloader = document.getElementById('preloader');
-    const counterElement = document.getElementById('money-counter');
-    const progressBar = document.getElementById('preLoaderBar');
-    
-    // Safety exit clause to prevent lockouts if elements fail to load
-    if (!preloader) return;
-
-    if (!counterElement || !progressBar) {
-        preloader.classList.add('done');
+document.addEventListener("DOMContentLoaded", () => {
+    // Release view window scroll parameters exactly when the cash container wraps up
+    setTimeout(() => {
         document.body.classList.remove('no-scroll');
-        return;
-    }
-    
-    let currentCount = 0;
-    const targetCount = 748920;      // Financial counting ceiling target
-    const animationDuration = 2200; // Complete loading duration (2.2 seconds)
-    const startTime = performance.now();
-
-    function cycleLoadingEngine(currentTime) {
-        const elapsed = currentTime - startTime;
-        
-        if (elapsed < animationDuration) {
-            const progressRatio = elapsed / animationDuration;
-            
-            // Simulates real machine deceleration towards the finish
-            const easeOutQuad = progressRatio * (2 - progressRatio); 
-            
-            // Synchronize numeric calculations
-            currentCount = Math.floor(easeOutQuad * targetCount);
-            counterElement.textContent = currentCount.toLocaleString();
-            
-            // Synchronize visual loading bar progress
-            progressBar.style.width = `${progressRatio * 100}%`;
-            
-            requestAnimationFrame(cycleLoadingEngine);
-        } else {
-            // Lock values exactly at completion targets
-            counterElement.textContent = targetCount.toLocaleString();
-            progressBar.style.width = '100%';
-            terminatePreloader();
-        }
-    }
-
-    // Initialize mechanical counting cycle
-    requestAnimationFrame(cycleLoadingEngine);
-
-    function terminatePreloader() {
-        setTimeout(() => {
-            // Drop preloader screen
-            preloader.classList.add('done');
-            // Restore document browser viewport scroll permissions
-            document.body.classList.remove('no-scroll');
-        }, 350); 
-    }
+    }, 3100); 
 });
 
-// Structural Routing Controller for Single Page Navigation (SPA Router)
+// Single Page Application Module Router Context Engine
 function gotoPage(pageId) {
-    // 1. Locate all component sections with the class .page
     const pages = document.querySelectorAll('.page');
     pages.forEach(page => page.classList.remove('active'));
     
-    // 2. Select target destination module
     const target = document.getElementById(`pg-${pageId}`);
     if (target) target.classList.add('active');
     
-    // 3. Update navbar item link highlight states
     const links = document.querySelectorAll('.nav-link');
     links.forEach(link => {
         link.classList.remove('active');
@@ -1549,7 +1495,6 @@ function gotoPage(pageId) {
         }
     });
     
-    // 4. Force screen view reset back to top position coordinates
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
