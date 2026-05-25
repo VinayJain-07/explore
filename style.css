@@ -1,81 +1,79 @@
-/* --- PRELOADER STYLING (BLACK & WHITE) --- */
 #preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    z-index: 10000; /* Stays above the splash screen initially */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Courier New', Courier, monospace; /* Gives a mechanical/ticker feel */
-    transition: opacity 0.6s ease, visibility 0.6s;
+  position: fixed; inset: 0; z-index: 99999;
+  background: #000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  transition: opacity 0.9s var(--swift, cubic-bezier(0.55, 0, 0.1, 1)), visibility 0.9s;
+}
+#preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.pre-eyebrow {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text3, #8e8e93); margin-bottom: 1.4rem;
+  opacity: 0; transform: translateY(10px);
+  animation: preFadeUp 0.7s 0.2s var(--ease, cubic-bezier(0.25, 1, 0.5, 1)) forwards;
 }
 
-.machine-container {
-    text-align: center;
-    color: #ffffff;
+.pre-name {
+  display: flex; align-items: flex-end; gap: 0.18em;
+  overflow: hidden;
+  margin-top: 1.5rem;
 }
 
-/* Money Slot Machine Loop Animation */
-.money-slot {
-    width: 160px;
-    height: 90px;
-    border: 4px solid #ffffff;
-    margin: 0 auto 30px auto;
-    position: relative;
-    overflow: hidden;
-    background: #111;
+/* Completed your cut-off styling with a premium typography reveal loop */
+.pre-word {
+  font-size: clamp(3.5rem, 9vw, 7rem); 
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(100%);
+  animation: preSlideUp 0.8s 0.5s var(--ease, cubic-bezier(0.25, 1, 0.5, 1)) forwards;
 }
 
-.bill {
-    position: absolute;
-    width: 130px;
-    height: 60px;
-    background: #ffffff;
-    left: 11px;
-    border: 2px dashed #000;
+/* --- Money Machine Mechanism UI --- */
+.pre-counter-wrap {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+.pre-symbol {
+  color: #555555; /* Subtle tone for the currency sign */
+  margin-right: 5px;
 }
 
-/* Simulating rapid bill-counting machine cycles */
-.bill-1 { top: -70px; animation: countMoney 0.15s linear infinite; }
-.bill-2 { top: -70px; animation: countMoney 0.15s linear infinite 0.05s; }
-.bill-3 { top: -70px; animation: countMoney 0.15s linear infinite 0.1s; }
-
-@keyframes countMoney {
-    0% { top: -70px; transform: scaleY(1); opacity: 0.3; }
-    50% { top: 12px; transform: scaleY(1.1); opacity: 1; }
-    100% { top: 95px; transform: scaleY(0.9); opacity: 0; }
+.pre-machine-slot {
+  width: 100px;
+  height: 4px;
+  background: #222;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
 }
-
-/* Counter Display */
-.counter-display {
-    font-size: 54px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 40px;
-    color: #ffffff;
+.pre-bill {
+  position: absolute;
+  width: 80px;
+  height: 2px;
+  background: #ffffff;
+  left: 10px;
 }
+.b1 { top: -5px; animation: billFlicker 0.12s infinite linear; }
+.b2 { top: -5px; animation: billFlicker 0.12s infinite linear 0.04s; }
+.b3 { top: -5px; animation: billFlicker 0.12s infinite linear 0.08s; }
 
-/* Vinay Jain Branding */
-.preloader-branding h1 {
-    font-family: 'Arial Black', Gadget, sans-serif;
-    font-size: 32px;
-    letter-spacing: 6px;
-    margin-bottom: 10px;
-    animation: pulseGlow 1.5s infinite ease-in-out;
+/* --- High Performance Keyframes --- */
+@keyframes preFadeUp {
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.preloader-branding p {
-    font-size: 14px;
-    font-style: italic;
-    color: #888888;
-    letter-spacing: 1px;
+@keyframes preSlideUp {
+  to { transform: translateY(0); }
 }
-
-@keyframes pulseGlow {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+@keyframes billFlicker {
+  0% { transform: translateY(-5px); opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
 }
