@@ -61,39 +61,70 @@ button{font-family:inherit;cursor:pointer}
 img{display:block;max-width:100%}
 
 /* ─────────────────────────────────────────────
-/* ═══ PRELOADER ═══ */
-#preloader{
-  position:fixed;inset:0;background:#02020a;z-index:999999;
+   PRELOADER
+───────────────────────────────────────────── */
+<div id="preloader">
+    <div class="pre-machine-slot">
+        <div class="pre-bill b1"></div>
+        <div class="pre-bill b2"></div>
+        <div class="pre-bill b3"></div>
+    </div>
+    
+    <div class="pre-eyebrow">Chaos to clarity, with total sincerity</div>
+    
+    <div class="pre-counter-wrap">
+        <span class="pre-symbol">$</span><span id="money-counter">000,000</span>
+    </div>
+    
+    <div class="pre-name">
+        <span class="pre-word">VINAY</span>
+        <span class="pre-word">JAIN</span>
+    </div>
+</div>
+preloader{
+  position:fixed;inset:0;z-index:99999;
+  background:#000;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
+  transition:opacity 0.9s var(--swift), visibility 0.9s;
+}
+#preloader.done{opacity:0;visibility:hidden;pointer-events:none}
+
+.pre-eyebrow{
+  font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:1.4rem;
+  opacity:0;transform:translateY(10px);
+  animation:fadeUp 0.7s 0.2s var(--ease) forwards;
+}
+.pre-name{
+  display:flex;align-items:flex-end;gap:0.18em;
   overflow:hidden;
 }
-#preloader-inner{display:flex;flex-direction:column;align-items:center;gap:28px;position:relative;z-index:2;}
-.pl-globe-wrap{position:relative;width:180px;height:180px;}
-#pl-globe{width:180px;height:180px;}
-.pl-globe-glow{
-  position:absolute;inset:-30px;border-radius:50%;
-  background:radial-gradient(circle,rgba(200,153,58,.12) 0%,transparent 70%);
-  pointer-events:none;
+.pre-word{
+  font-size:clamp(3.5rem,9vw,7rem);font-weight:800;
+  letter-spacing:-0.04em;line-height:1;color:var(--text);
+  transform:translateY(110%);
+  display:block;
 }
-.pl-tagline{
-  font-family:var(--ff);font-size:clamp(.55rem,2vw,.75rem);
-  letter-spacing:.32em;text-transform:uppercase;color:var(--mu);
-  text-align:center;max-width:360px;line-height:1.9;opacity:0;
+.pre-word:nth-child(1){animation:wordUp 0.8s 0.35s var(--swift) forwards}
+.pre-word:nth-child(2){animation:wordUp 0.8s 0.5s var(--swift) forwards;color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,0.25)}
+.pre-tagline{
+  font-size:0.85rem;font-weight:400;color:var(--text3);letter-spacing:0.04em;
+  margin-top:2rem;
+  opacity:0;animation:fadeUp 0.7s 1s var(--ease) forwards;
 }
-.pl-name{
-  font-family:var(--ff);font-size:clamp(1.4rem,4vw,2.8rem);font-weight:900;
-  letter-spacing:.12em;text-transform:uppercase;
-  background:linear-gradient(135deg,var(--gold),var(--gold2),var(--vio));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  opacity:0;text-align:center;
+.pre-progress{
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:rgba(255,255,255,0.06);
 }
-.pl-bar-wrap{width:220px;height:1px;background:var(--bd);position:relative;overflow:hidden;}
-.pl-bar-fill{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),var(--vio),var(--em));width:0%;box-shadow:0 0 10px var(--gold);}
-.pl-pct{font-family:var(--fm);font-size:.5rem;letter-spacing:.25em;color:var(--mu);margin-top:8px;opacity:0;}
- 
-/* particle canvas for explosion */
-#particle-canvas{position:fixed;inset:0;z-index:999998;pointer-events:none;}
- 
+.pre-bar{
+  height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));
+  width:0;animation:loadBar 2.2s 0.3s var(--swift) forwards;
+}
+
+@keyframes wordUp{to{transform:translateY(0)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes loadBar{to{width:100%}}
 
 /* ─────────────────────────────────────────────
    CURSOR
@@ -1237,64 +1268,22 @@ const IMGS = {"professional": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
 </script>
 
 <script>
-* ══════════════════════════════════════════
-   PRELOADER SEQUENCE
-══════════════════════════════════════════ */
-(function(){
-  const fill=document.getElementById('pl-fill');
-  const pct=document.getElementById('pl-pct');
-  const plName=document.getElementById('pl-name');
-  const plTagline=document.getElementById('pl-tagline');
-  const dollar=document.getElementById('pl-dollar');
-  const loader=document.getElementById('preloader');
- 
-  const globe=animateGlobe();
- 
-  // Name reveal
-  gsap.to(plName,{opacity:1,y:0,duration:.8,delay:.3,ease:'power3.out'});
- 
-  // Tagline — letter by letter
-  setTimeout(()=>{
-    const text=plTagline.innerHTML;
-    plTagline.style.opacity='1';
-    // Animate each word
-    const words=plTagline.querySelectorAll?.[0];
-    gsap.fromTo(plTagline,{opacity:0,y:8},{opacity:1,y:0,duration:.9,ease:'power2.out'});
-  },700);
- 
-  // Percentage counter + bar fill
-  let p=0;
-  const iv=setInterval(()=>{
-    p=Math.min(100,p+Math.random()*2.8+.6);
-    fill.style.width=p+'%';
-    if(pct)pct.style.opacity='1';
-    if(pct)pct.textContent=Math.floor(p)+'%';
-    globe.setLevel(p);
- 
-    // Dollar symbol fades in as fills
-    if(dollar && p>30){
-      gsap.to(dollar,{attr:{fill:`rgba(200,153,58,${(p-30)/100})`},duration:.3,overwrite:true});
-    }
- 
-    if(p>=100){
-      clearInterval(iv);
-      // Trigger explosion
-      setTimeout(()=>{
-        globe.stop();
-        const rect=document.getElementById('pl-globe').getBoundingClientRect();
-        const cx=rect.left+rect.width/2;
-        const cy=rect.top+rect.height/2;
-        triggerParticles(cx,cy,90);
- 
-        // Flash
-        gsap.to(loader,{opacity:0,duration:.9,delay:.35,ease:'power2.inOut',onComplete:()=>{
-          loader.style.display='none';
-          boot();
-        }});
-      },280);
-    }
-  },38);
-})();
+/* ─────────────── PRELOADER (fix: use DOMContentLoaded + hard fallback) ─────────────── */
+function dismissPreloader() {
+  var pre = document.getElementById('preloader');
+  if (!pre) return;
+  pre.classList.add('done');
+  document.body.classList.remove('no-scroll');
+}
+
+// Primary: fire after DOM ready + short delay for animation
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(dismissPreloader, 2500);
+});
+
+// Hard fallback: always dismiss after 4s no matter what
+setTimeout(dismissPreloader, 4000);
+
 /* ─────────────── TAGLINE CYCLE ─────────────── */
 var taglines = [
   'Chaos to Clarity — with Total Sincerity',
