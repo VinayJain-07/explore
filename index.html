@@ -1608,6 +1608,16 @@ function injectImages() {
 injectImages();
 
 <script>
+// Fail-safe release engine to unlock page scrolling smoothly
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        document.body.classList.remove('no-scroll');
+    }, 2900); 
+});
+</script>
+</div> <!-- 1. STRAY CLOSING TAG -->
+    
+<script>
 document.addEventListener("DOMContentLoaded", () => {
     // Release view window scroll parameters exactly when the cash container wraps up
     setTimeout(() => {
